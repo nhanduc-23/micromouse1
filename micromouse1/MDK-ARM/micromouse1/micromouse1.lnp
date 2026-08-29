@@ -1,0 +1,23 @@
+--cpu=Cortex-M4.fp.sp
+"micromouse1\startup_stm32f411xe.o"
+"micromouse1\main.o"
+"micromouse1\stm32f4xx_it.o"
+"micromouse1\stm32f4xx_hal_msp.o"
+"micromouse1\stm32f4xx_hal_rcc.o"
+"micromouse1\stm32f4xx_hal_rcc_ex.o"
+"micromouse1\stm32f4xx_hal_flash.o"
+"micromouse1\stm32f4xx_hal_flash_ex.o"
+"micromouse1\stm32f4xx_hal_flash_ramfunc.o"
+"micromouse1\stm32f4xx_hal_gpio.o"
+"micromouse1\stm32f4xx_hal_dma_ex.o"
+"micromouse1\stm32f4xx_hal_dma.o"
+"micromouse1\stm32f4xx_hal_pwr.o"
+"micromouse1\stm32f4xx_hal_pwr_ex.o"
+"micromouse1\stm32f4xx_hal_cortex.o"
+"micromouse1\stm32f4xx_hal.o"
+"micromouse1\stm32f4xx_hal_exti.o"
+"micromouse1\system_stm32f4xx.o"
+--strict --scatter "micromouse1\micromouse1.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "micromouse1.map" -o micromouse1\micromouse1.axf
