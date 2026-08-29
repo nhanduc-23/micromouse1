@@ -1,0 +1,54 @@
+# Chặn các file rác biên dịch của Keil C v5 nằm trong thư mục micromouse1 con
+micromouse1/MDK-ARM/*.o
+micromouse1/MDK-ARM/*.d
+micromouse1/MDK-ARM/*.crf
+micromouse1/MDK-ARM/*.lnp
+micromouse1/MDK-ARM/*.axf
+micromouse1/MDK-ARM/*.htm
+micromouse1/MDK-ARM/*.sct
+micromouse1/MDK-ARM/*.map
+micromouse1/MDK-ARM/*.dep
+micromouse1/MDK-ARM/*.lst
+micromouse1/MDK-ARM/*.__i
+micromouse1/MDK-ARM/*.build_log.htm
+# Chặn toàn bộ file rác và log biên dịch của Keil C v5 bất kể vị trí thư mục nào
+**/*.o
+**/*.d
+**/*.crf
+**/*.lnp
+**/*.axf
+**/*.htm
+**/*.sct
+**/*.map
+**/*.dep
+**/*.lst
+**/*.__i
+
+# Chặn các thư mục tạm tự sinh của Keil C v5
+**/Listings/
+**/Objects/
+**/DebugConfig/
+
+# Chặn file cấu hình giao diện cá nhân tạo xung đột giữa VS Code và Keil C
+**/*.uvoptx
+**/*.uvgui.*
+**/*.uvguix.*
+**/*.uv2.bak
+
+# Chặn cấu hình riêng của VS Code
+.vscode/
+.history/
+
+# Chặn các thư mục tạm tự sinh khi Build bằng Keil C
+micromouse1/MDK-ARM/Listings/
+micromouse1/MDK-ARM/Objects/
+micromouse1/MDK-ARM/DebugConfig/
+
+# Chặn cấu hình giao diện cá nhân của Keil C v5 (Bắt buộc để không xung đột)
+micromouse1/MDK-ARM/*.uvoptx
+micromouse1/MDK-ARM/*.uvgui.*
+micromouse1/MDK-ARM/*.uv2.bak
+
+# Chặn cấu hình cá nhân của VS Code
+.vscode/
+.history/
