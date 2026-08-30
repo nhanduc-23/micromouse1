@@ -3,12 +3,12 @@
 
 #include "main.h"
 #include <stdbool.h>
-
+#include "stm32f4xx_hal.h"
 //Dia chi I2C dang 80bit cho 4 cam bien Laser
 #define VL53L0X_ADDR_DEFAULT        (0x29 << 1)
-#define VL53L0X_ADDR_LEFT			(0x30 << 1) // Ngang trái(PA3)
-#define VL53L0X_ADDR_DIAG_LEFT		(0x32 << 1) //Cheo trai (PA4)
-#define VL53L0X_ADDR_DIAG_RIGHT		(0X34 << 1) //Cheo phai(PB0)
+#define VL53L0X_ADDR_LEFT						(0x30 << 1) // Ngang trái(PA3)
+#define VL53L0X_ADDR_DIAG_LEFT			(0x32 << 1) //Cheo trai (PA4)
+#define VL53L0X_ADDR_DIAG_RIGHT			(0X34 << 1) //Cheo phai(PB0)
 #define VL53L0X_ADDR_RIGHT 					(0x36 << 1) //Ngang phai (PB1)
 
 //Nguong phat hien tuong (mm) - Chinh lai tuy theo kich thuoc o sa ban

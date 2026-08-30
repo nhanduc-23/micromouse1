@@ -1,173 +1,70 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body - Micromouse STM32F411
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-
-/* Includes ------------------------------------------------------------------*/
-#include "main.h"
-
-/* USER CODE BEGIN Includes */
-#include "motor.h"
-#include "encoder.h"
 #include "vl53l0x.h"
-// #include "mpu6500.h"
-// #include "pid.h"
-// #include "floodfill.h"
-/* USER CODE END Includes */
 
-/* USER CODE BEGIN PV */
-volatile uint8_t system_mode = 0; // 0: Standby, 1: Do duong, 2: Speedrun, 3: Lock
+extern I2C_HandleTypeDef hi2c1;
+Distance_Data_t sensor_dist = {0};
 
-// Bien theo doi xung Encoder
-int16_t pulse_left = 0;
-int16_t pulse_right = 0;
-
-// Toa do va huong di cua robot trong me cung
-int current_x = 0, current_y = 0;
-int orient = 0; // 0: FORWARD, 1: RIGHT, 2: BACKWARD, 3: LEFT
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
-int main(void)
+// Ham ho tro doi dia chi I2C cho 1 cam bien VL53L0X
+static void VL53L0X_SetAddress(uint8_t current_addr, uint8_t new_addr)
 {
-  /* MCU Configuration */
-  HAL_Init();
-  SystemClock_Config();
-  MX_GPIO_Init();
-
-  /* USER CODE BEGIN 2 */
-  // Khoi tao khoi dong co, Encoder va 4 cam bien Laser
-  Motor_Init();        // Kich hoat PWM TIM1 dieu khien motor
-  Encoder_Init();      // Kich hoat TIM2 & TIM3 doc xung banh xe
-  VL53L0X_Init_All();  // Doi dia chi I2C va bat 4 cam bien Laser
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    // Cap nhat gia tri xung Encoder lien tuc
-    pulse_left = Encoder_Get_Left();
-    pulse_right = Encoder_Get_Right();
-    
-    if (system_mode == 0) {
-      // Che do 0: Standby - Dung motor, nhap nhay LED PC13
-      Motor_Stop();
-      HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-      HAL_Delay(500);
-    }
-    else if (system_mode == 1) {
-      // Che do 1: DO DUONG (Flood Fill + PID bam tuong)
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET); // Bat LED
-      
-      // 1. Doc khoang cach tu 4 cam bien Laser
-      VL53L0X_Read_All(&sensor_dist);
-      
-      // 2. Kiem tra vat can bang cac API
-      if (wallFront()) {
-        // Phat hien vach ngan phia truoc (2 mat cheo)
-      }
-      if (wallLeft()) {
-        // Phat hien vach ngan ben trai
-      }
-      if (wallRight()) {
-        // Phat hien vach ngan ben phai
-      }
-    }
-    else if (system_mode == 2) {
-      // Che do 2: SPEEDRUN
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-    }
-    else if (system_mode == 3) {
-      // Che do 3: KHOA HE THONG
-      Motor_Stop();
-      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
-      HAL_Delay(100);
-    }
-    /* USER CODE END WHILE */
-  }
+    uint8_t payload[2] = {0x8A, (uint8_t)(new_addr >> 1)};
+    HAL_I2C_Master_Transmit(&hi2c1, current_addr, payload, 2, HAL_MAX_DELAY);
 }
 
-/* SystemClock_Config va MX_GPIO_Init giu nguyen */
-void SystemClock_Config(void)
+// Khoi tao va phan chia dia chi I2C cho 4 cam bien qua chan XSHUT
+void VL53L0X_Init_All(void)
 {
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+    // 1. Keo 4 chan XSHUT xuong LOW de reset va dua tat ca cam bien vao che do cho
+    HAL_GPIO_WritePin(XSHUT_LEFT_PORT, XSHUT_LEFT_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(XSHUT_DIAG_L_PORT, XSHUT_DIAG_L_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(XSHUT_DIAG_R_PORT, XSHUT_DIAG_R_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(XSHUT_RIGHT_PORT, XSHUT_RIGHT_PIN, GPIO_PIN_RESET);
+    HAL_Delay(10);
 
-  __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+    // 2. Kich hoat va doi dia chi I2C lan luot cho tung cam bien
+    // Laser Ngang Trai (PA3)
+    HAL_GPIO_WritePin(XSHUT_LEFT_PORT, XSHUT_LEFT_PIN, GPIO_PIN_SET);
+    HAL_Delay(5);
+    VL53L0X_SetAddress(VL53L0X_ADDR_DEFAULT, VL53L0X_ADDR_LEFT);
 
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 12;
-  RCC_OscInitStruct.PLL.PLLN = 96;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
+    // Laser Cheo Trai (PA4)
+    HAL_GPIO_WritePin(XSHUT_DIAG_L_PORT, XSHUT_DIAG_L_PIN, GPIO_PIN_SET);
+    HAL_Delay(5);
+    VL53L0X_SetAddress(VL53L0X_ADDR_DEFAULT, VL53L0X_ADDR_DIAG_LEFT);
 
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+    // Laser Cheo Phai (PB0)
+    HAL_GPIO_WritePin(XSHUT_DIAG_R_PORT, XSHUT_DIAG_R_PIN, GPIO_PIN_SET);
+    HAL_Delay(5);
+    VL53L0X_SetAddress(VL53L0X_ADDR_DEFAULT, VL53L0X_ADDR_DIAG_RIGHT);
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
-  {
-    Error_Handler();
-  }
+    // Laser Ngang Phai (PB1)
+    HAL_GPIO_WritePin(XSHUT_RIGHT_PORT, XSHUT_RIGHT_PIN, GPIO_PIN_SET);
+    HAL_Delay(5);
+    VL53L0X_SetAddress(VL53L0X_ADDR_DEFAULT, VL53L0X_ADDR_RIGHT);
 }
 
-static void MX_GPIO_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
+// Ham doc khoang cach tu tat ca cam bien (truyen vao con tro dist)
+void VL53L0X_Read_All(Distance_Data_t *dist) {
+    if (dist == NULL) return;
 
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-
-  GPIO_InitStruct.Pin = GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    // TODO: Doc thanh ghi khoang cach I2C thuc te va luu vao sensor_dist
+    dist->left = sensor_dist.left;
+    dist->diag_left = sensor_dist.diag_left;
+    dist->diag_right = sensor_dist.diag_right;
+    dist->right = sensor_dist.right;
 }
 
-/* USER CODE BEGIN 4 */
-// Ham ngat ngoai xu ly nut nhan PA2 chuyen che do (Duy nhat 1 ham o day)
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-  if (GPIO_Pin == BTN_MODE_PIN) {
-    if (system_mode < 2) {
-      system_mode++; // Nhan lan 1: Do duong (1), Lan 2: Speedrun (2)
-    } else {
-      system_mode = 3; // Nhan lan 3: Khoa xe (3)
-    }
-  }
+// Kiem tra co tuong phia truoc hay khong (dung 2 mat cheo)
+bool wallFront(void) {
+    return (sensor_dist.diag_left < THRESHOLD_DIAG_FRONT_MM || 
+            sensor_dist.diag_right < THRESHOLD_DIAG_FRONT_MM);
 }
-/* USER CODE END 4 */
 
-void Error_Handler(void)
-{
-  __disable_irq();
-  while (1)
-  {
-  }
+// Kiem tra tuong ben trai (dung mat ngang trai)
+bool wallLeft(void) {
+    return (sensor_dist.left < THRESHOLD_SIDE_MM);
+}
+
+// Kiem tra tuong ben phai (dung mat ngang phai)
+bool wallRight(void) {
+    return (sensor_dist.right < THRESHOLD_SIDE_MM);
 }
