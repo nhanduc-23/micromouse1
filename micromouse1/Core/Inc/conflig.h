@@ -45,30 +45,32 @@ typedef struct {
 // 3. DINH NGHIA PHAN CUNG (PIN MAPPING)
 // ==========================================
 // Driver Dong co (TB6612)
-static const Pin MOTOR_STBY      = { GPIOC, GPIO_PIN_14 }; // PC14
-static const Pin MOTOR_AIN1      = { GPIOB, GPIO_PIN_12 }; // PB12
-static const Pin MOTOR_AIN2      = { GPIOB, GPIO_PIN_13 }; // PB13
-static const Pin MOTOR_BIN1      = { GPIOB, GPIO_PIN_14 }; // PB14
-static const Pin MOTOR_BIN2      = { GPIOB, GPIO_PIN_15 }; // PB15
+static const Pin MOTOR_STBY      = { GPIOA, GPIO_PIN_5 };  // PA5[cite: 1]
+static const Pin MOTOR_AIN1      = { GPIOB, GPIO_PIN_12 }; // PB12[cite: 1]
+static const Pin MOTOR_AIN2      = { GPIOB, GPIO_PIN_13 }; // PB13[cite: 1]
+static const Pin MOTOR_BIN1      = { GPIOB, GPIO_PIN_14 }; // PB14[cite: 1]
+static const Pin MOTOR_BIN2      = { GPIOB, GPIO_PIN_15 }; // PB15[cite: 1]
 
 // Cam bien VL53L0X (Chan XSHUT)
-static const Pin XSHUT_FL        = { GPIOB, GPIO_PIN_0 };  // PB0
-static const Pin XSHUT_FR        = { GPIOB, GPIO_PIN_1 };  // PB1
-static const Pin XSHUT_L         = { GPIOB, GPIO_PIN_2 };  // PB2
-static const Pin XSHUT_R         = { GPIOB, GPIO_PIN_10 }; // PB10
+static const Pin XSHUT_L         = { GPIOA, GPIO_PIN_3 };  // PA3 - Laser 1 (Trai)[cite: 1]
+static const Pin XSHUT_FL        = { GPIOA, GPIO_PIN_4 };  // PA4 - Laser 2 (Truoc-Trai)[cite: 1]
+static const Pin XSHUT_FR        = { GPIOB, GPIO_PIN_0 };  // PB0 - Laser 3 (Truoc-Phai)[cite: 1]
+static const Pin XSHUT_R         = { GPIOB, GPIO_PIN_1 };  // PB1 - Laser 4 (Phai)[cite: 1]
 
 // Dem xung Encoder (Hardware TIM2 & TIM3)
-static const Pin ENCODER_L_A     = { GPIOA, GPIO_PIN_0 }; // TIM2_CH1 - PA0
-static const Pin ENCODER_L_B     = { GPIOA, GPIO_PIN_1 }; // TIM2_CH2 - PA1
-static const Pin ENCODER_R_A     = { GPIOA, GPIO_PIN_6 }; // TIM3_CH1 - PA6
-static const Pin ENCODER_R_B     = { GPIOA, GPIO_PIN_7 }; // TIM3_CH2 - PA7
+static const Pin ENCODER_L_A     = { GPIOA, GPIO_PIN_0 }; // TIM2_CH1 - PA0[cite: 1]
+static const Pin ENCODER_L_B     = { GPIOA, GPIO_PIN_1 }; // TIM2_CH2 - PA1[cite: 1]
+static const Pin ENCODER_R_A     = { GPIOA, GPIO_PIN_6 }; // TIM3_CH1 - PA6[cite: 1]
+static const Pin ENCODER_R_B     = { GPIOA, GPIO_PIN_7 }; // TIM3_CH2 - PA7[cite: 1]
 
 // Dieu khien PWM (TIM1)
 static const Pin PWM_LEFT        = { GPIOA, GPIO_PIN_8 }; // TIM1_CH1 - PA8
 static const Pin PWM_RIGHT       = { GPIOA, GPIO_PIN_9 }; // TIM1_CH2 - PA9
 
 // Nut nhan / Nut gat cau hinh
-static const Pin SWITCH_1        = { GPIOA, GPIO_PIN_11 }; // PA11
-static const Pin SWITCH_2        = { GPIOA, GPIO_PIN_12 }; // PA12
+static const Pin LED_BOARD       = { GPIOC, GPIO_PIN_13 }; // PC13[cite: 1]
+static const Pin BTN_MODE        = { GPIOA, GPIO_PIN_2 };  // PA2[cite: 1]
+static const Pin BT_RXD          = { GPIOA, GPIO_PIN_11 }; // PA11[cite: 1]
+static const Pin BT_TXD          = { GPIOA, GPIO_PIN_12 }; // PA12[cite: 1]
 
 #endif // CONFIG_H

@@ -1937,7 +1937,7 @@ Removing Unused input sections from the image.
     Removing system_stm32f4xx.o(.text.SystemCoreClockUpdate), (134 bytes).
     Removing system_stm32f4xx.o(.ARM.exidx.text.SystemCoreClockUpdate), (8 bytes).
     Removing tb6612fng.o(.text), (0 bytes).
-    Removing tb6612fng.o(.text.TB6612_Init), (112 bytes).
+    Removing tb6612fng.o(.text.TB6612_Init), (110 bytes).
     Removing tb6612fng.o(.ARM.exidx.text.TB6612_Init), (8 bytes).
     Removing tb6612fng.o(.text.TB6612_Stop), (82 bytes).
     Removing tb6612fng.o(.ARM.exidx.text.TB6612_Stop), (8 bytes).
@@ -1955,4 +1955,4 @@ Removing Unused input sections from the image.
     Removing encoder.o(.ARM.exidx.text.Encoder_GetDistanceMM), (8 bytes).
     Removing encoder.o(.bss..L_MergedGlobals), (8 bytes).
 
-904 unused section(s) (total 60696 bytes) removed from the image.
+904 unused section(s) (total 60694 bytes) removed from the image.
