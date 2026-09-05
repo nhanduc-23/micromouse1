@@ -1,4 +1,5 @@
 #include "encoder.h"
+#include "conflig.h"
 
 static TIM_HandleTypeDef *tim_l;
 static TIM_HandleTypeDef *tim_r;
@@ -23,4 +24,13 @@ void Encoder_GetCounters(int16_t *cnt_left, int16_t *cnt_right) {
 void Encodet_Reset(void){
 	__HAL_TIM_SET_COUNTER(tim_l, 0);
   __HAL_TIM_SET_COUNTER(tim_r, 0);
+}
+
+// Bo sung ham doi xung sang mm dua tren cau hinh co khi
+void Encoder_GetDistanceMM(float *dist_left_mm, float *dist_right_mm) {
+    int16_t cnt_l = 0, cnt_r = 0;
+    Encoder_GetCounters(&cnt_l, &cnt_r);
+    
+    *dist_left_mm  = (float)cnt_l * MM_PER_COUNT;
+    *dist_right_mm = (float)cnt_r * MM_PER_COUNT;
 }

@@ -22,6 +22,8 @@
 "micromouse1\stm32f4xx_hal_tim_ex.o"
 "micromouse1\stm32f4xx_hal_uart.o"
 "micromouse1\system_stm32f4xx.o"
+"micromouse1\tb6612fng.o"
+"micromouse1\encoder.o"
 --strict --scatter "micromouse1\micromouse1.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

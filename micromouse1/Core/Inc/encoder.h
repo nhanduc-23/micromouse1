@@ -3,12 +3,11 @@
 
 #include "stm32f4xx_hal.h"
 
-//Khoi tao Mode Encoder cho TIM2 (trai) va TIM3(Phai)
 void Encoder_Init(TIM_HandleTypeDef *htim_left, TIM_HandleTypeDef *htim_right);
-
-//Doc so xung tich luy hien tai cua hai banh 
 void Encoder_GetCounters(int16_t *cnt_left, int16_t *cnt_right);
-
-//Reset thanh ghi diem xing ve 0
 void Encoder_Reset(void);
-#endif
+
+// Bo sung hàm doc quãng duong theo mm
+void Encoder_GetDistanceMM(float *dist_left_mm, float *dist_right_mm);
+
+#endif /* ENCODER_H */
