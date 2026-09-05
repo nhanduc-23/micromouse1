@@ -3,6 +3,8 @@
 "micromouse1\main.o"
 "micromouse1\stm32f4xx_it.o"
 "micromouse1\stm32f4xx_hal_msp.o"
+"micromouse1\stm32f4xx_hal_i2c.o"
+"micromouse1\stm32f4xx_hal_i2c_ex.o"
 "micromouse1\stm32f4xx_hal_rcc.o"
 "micromouse1\stm32f4xx_hal_rcc_ex.o"
 "micromouse1\stm32f4xx_hal_flash.o"
@@ -16,6 +18,9 @@
 "micromouse1\stm32f4xx_hal_cortex.o"
 "micromouse1\stm32f4xx_hal.o"
 "micromouse1\stm32f4xx_hal_exti.o"
+"micromouse1\stm32f4xx_hal_tim.o"
+"micromouse1\stm32f4xx_hal_tim_ex.o"
+"micromouse1\stm32f4xx_hal_uart.o"
 "micromouse1\system_stm32f4xx.o"
 --strict --scatter "micromouse1\micromouse1.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
