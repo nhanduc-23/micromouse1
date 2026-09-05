@@ -24,7 +24,8 @@
 "micromouse1\system_stm32f4xx.o"
 "micromouse1\tb6612fng.o"
 "micromouse1\encoder.o"
---strict --scatter "micromouse1\micromouse1.sct"
+"micromouse1\bt_debug.o"
+--library_type=microlib --strict --scatter "micromouse1\micromouse1.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list "micromouse1.map" -o micromouse1\micromouse1.axf
