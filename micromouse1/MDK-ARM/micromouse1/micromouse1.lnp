@@ -25,6 +25,11 @@
 "micromouse1\tb6612fng.o"
 "micromouse1\encoder.o"
 "micromouse1\bt_debug.o"
+"micromouse1\vl53l0x.o"
+"micromouse1\mpu6500.o"
+"micromouse1\sensor_fusion.o"
+"micromouse1\motion_controller.o"
+"micromouse1\pid.o"
 --library_type=microlib --strict --scatter "micromouse1\micromouse1.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

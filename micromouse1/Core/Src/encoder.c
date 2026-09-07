@@ -21,7 +21,7 @@ void Encoder_GetCounters(int16_t *cnt_left, int16_t *cnt_right) {
 	*cnt_left = (int16_t)__HAL_TIM_GET_COUNTER(tim_l);
 	*cnt_right = (int16_t)__HAL_TIM_GET_COUNTER(tim_r);
 }
-void Encodet_Reset(void){
+void Encoder_Reset(void){
 	__HAL_TIM_SET_COUNTER(tim_l, 0);
   __HAL_TIM_SET_COUNTER(tim_r, 0);
 }
