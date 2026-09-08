@@ -21,17 +21,35 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "tb6612fng.h"
+#include "encoder.h"
+#include "bt_debug.h"
+#include "vl53l0x.h"
+#include "mpu6500.h"
+#include "sensor_fusion.h"
+#include "motion_controller.h"
+#include "pid.h"
+#include "flash.h"
+#include "maze_solver.h"
+#include <stdio.h>
+
 
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+typedef enum {
+    SYS_STATE_IDLE,
+    SYS_STATE_EXPLORE,
+    SYS_STATE_FAST_RUN,
+    SYS_STATE_FINISHED,
+    SYS_STATE_ERROR
+} SystemState;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define CONTROL_LOOP_PERIOD_MS 10 // Chu ki vong lap 10ms (100Hz)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,7 +69,8 @@ TIM_HandleTypeDef htim5;
 UART_HandleTypeDef huart6;
 
 /* USER CODE BEGIN PV */
-
+static SystemState current_sys_state = SYS_STATE_IDLE;
+static uint32_t last_tick = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,7 +84,7 @@ static void MX_TIM3_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_TIM5_Init(void);
 /* USER CODE BEGIN PFP */
-
+void Process_FSM(float dt);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -110,13 +129,47 @@ int main(void)
   MX_USART6_UART_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
+  // 1. Khoi tao cac module phan cung
+	Encoder_Init(&htim2, &htim3);
+	TB6612_Init(&htim1);
+	LOG_SYS("--- MICROMOUSE STARTUP ---\r\n");
+	// 2. Khoi tao cam bien
+	if (VL53L0X_Init_All(&hi2c1) != HAL_OK) {
+      LOG_SYS("[ERROR] VL53L0X Init Failed!\r\n");
+  } else {
+      LOG_SYS("[OK] VL53L0X Initialized.\r\n");
+  }
 
+  if (MPU6500_Init(&hi2c2) != HAL_OK) {
+      LOG_SYS("[ERROR] MPU6500 Init Failed!\r\n");
+  } else {
+      LOG_SYS("[OK] MPU6500 Initialized.\r\n");
+  }
+	//3. Khoi tao thuat toan & bo dieu khien
+	SensorFusion_Init();
+  Motion_Init();
+  Maze_Init();
+
+  LOG_SYS("System Ready. Press Switch to Start Exploration.\r\n");
+  last_tick = HAL_GetTick();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		uint32_t current_tick = HAL_GetTick();
+		
+		//Dinh thoi chu ky 10ms (100Hz) cho PID va Sensor Fusion
+		if (current_tick - last_tick >= CONTROL_LOOP_PERIOD_MS) {
+			float dt = (current_tick - last_tick) / 1000.0f;
+        last_tick = current_tick;
+			// cap nhat cam bien & bo dieu khien dong co 
+			SensorFusion_Update(dt);
+      Motion_Update(dt);
+			
+			// Chay may trang thai he thong
+			Process_FSM(dt);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

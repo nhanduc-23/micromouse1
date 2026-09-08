@@ -1,6 +1,7 @@
 #ifndef BT_DEBUG_H
 #define BT_DEBUG_H
 
+#include "main.h"
 #include "stm32f4xx_hal.h"
 #include <stdio.h>
 
@@ -17,20 +18,20 @@ void BT_Init_Rx(UART_HandleTypeDef *huart);
 void BT_ParseCommand(char *cmd);
 
 // =================================================================
-// MACRO GHI LOG CHUAN HOÁ CHO GIAO DIEN NEZUMI_CHAN DEBUG CONSOLE
+// MACRO GHI LOG CHUAN HOA CHO GIAO DIEN NEZUMI_CHAN DEBUG CONSOLE
 // =================================================================
 
 // Log He thong & Khoi tao (Tab ALL / SYS)
-#define LOG_SYS(fmt, ...)          printf("[SYS] " fmt "\r\n", ##__VA_ARGS__)
+#define LOG_SYS(...)          printf("[SYS] " __VA_ARGS__)
 
 // Log Thuat toan tim duong (Tab SRCH)
-#define LOG_SRCH(fmt, ...)         printf("[SRCH] " fmt "\r\n", ##__VA_ARGS__)
+#define LOG_SRCH(...)         printf("[SRCH] " __VA_ARGS__)
 
 // Log Canh bao va cham / lech tuong (Tab WRN)
-#define LOG_WRN(fmt, ...)          printf("[WRN] " fmt "\r\n", ##__VA_ARGS__)
+#define LOG_WRN(...)          printf("[WRN] " __VA_ARGS__)
 
 // Log Bao loi phan cung / Timeout (Tab ERR)
-#define LOG_ERR(fmt, ...)          printf("[ERR] " fmt "\r\n", ##__VA_ARGS__)
+#define LOG_ERR(...)          printf("[ERR] " __VA_ARGS__)
 
 // Cap nhat vi tri va huong Robot len ban do 16x16 (Tab MAZE)
 #define LOG_MAZE_POS(x, y, dir)    printf("[MAZE] POS:%d,%d,%c\r\n", (int)(x), (int)(y), (char)(dir))

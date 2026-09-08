@@ -1,6 +1,7 @@
 #ifndef VL53L0X_H
 #define VL53L0X_H
 
+#include "main.h"
 #include "stm32f4xx_hal.h"
 
 // Cau truc luu tru gia tri do khoang cach (mm) cua 4 cam bien

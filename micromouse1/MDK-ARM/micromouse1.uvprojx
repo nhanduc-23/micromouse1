@@ -775,6 +775,11 @@
           <GroupName>Platform</GroupName>
           <Files>
             <File>
+              <FileName>conflig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\conflig.h</FilePath>
+            </File>
+            <File>
               <FileName>tb6612fng.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Core\Inc\tb6612fng.h</FilePath>
@@ -804,16 +809,16 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Src\bt_debug.c</FilePath>
             </File>
-            <File>
-              <FileName>conflig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\conflig.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Sensing</GroupName>
           <Files>
+            <File>
+              <FileName>conflig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\conflig.h</FilePath>
+            </File>
             <File>
               <FileName>vl53l0x.h</FileName>
               <FileType>5</FileType>
@@ -823,11 +828,6 @@
               <FileName>vl53l0x.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\vl53l0x.c</FilePath>
-            </File>
-            <File>
-              <FileName>conflig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\conflig.h</FilePath>
             </File>
             <File>
               <FileName>mpu6500.h</FileName>
@@ -845,9 +845,9 @@
           <GroupName>Motion</GroupName>
           <Files>
             <File>
-              <FileName>sensor_fusion.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\sensor_fusion.c</FilePath>
+              <FileName>conflig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\conflig.h</FilePath>
             </File>
             <File>
               <FileName>sensor_fusion.h</FileName>
@@ -855,9 +855,9 @@
               <FilePath>..\Core\Inc\sensor_fusion.h</FilePath>
             </File>
             <File>
-              <FileName>conflig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Core\Inc\conflig.h</FilePath>
+              <FileName>sensor_fusion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\sensor_fusion.c</FilePath>
             </File>
             <File>
               <FileName>motion_controller.h</FileName>
@@ -870,19 +870,41 @@
               <FilePath>..\Core\Src\motion_controller.c</FilePath>
             </File>
             <File>
-              <FileName>pid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\pid.c</FilePath>
-            </File>
-            <File>
               <FileName>pid.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Core\Inc\pid.h</FilePath>
+            </File>
+            <File>
+              <FileName>pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\pid.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Navigation</GroupName>
+          <Files>
+            <File>
+              <FileName>flash.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\flash.h</FilePath>
+            </File>
+            <File>
+              <FileName>flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>maze_solver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\maze_solver.h</FilePath>
+            </File>
+            <File>
+              <FileName>maze_solver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\maze_solver.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
