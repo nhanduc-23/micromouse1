@@ -50,6 +50,7 @@ typedef enum {
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define CONTROL_LOOP_PERIOD_MS 10 // Chu ki vong lap 10ms (100Hz)
+#define DEBOUNCE_DELAY_MS      200 // Thoi gian chong doi nut nhan
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -71,6 +72,12 @@ UART_HandleTypeDef huart6;
 /* USER CODE BEGIN PV */
 static SystemState current_sys_state = SYS_STATE_IDLE;
 static uint32_t last_tick = 0;
+static uint32_t last_button_tick = 0;
+
+//Them 2 bien luu du lieu cam bien cho Sensor Fusion
+static VL53L0X_Data vl_sensor_data;
+static MPU6500_Data mpu_sensor_data;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,6 +92,7 @@ static void MX_USART6_UART_Init(void);
 static void MX_TIM5_Init(void);
 /* USER CODE BEGIN PFP */
 void Process_FSM(float dt);
+uint8_t Is_Button_Pressed(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -129,6 +137,8 @@ int main(void)
   MX_USART6_UART_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
+	// kich hoat motor driver TB6612 (chuyen chan SSTBY tu RESET sang SET)
+	HAL_GPIO_WritePin(STBY_GPIO_Port, STBY_Pin, GPIO_PIN_SET);
   // 1. Khoi tao cac module phan cung
 	Encoder_Init(&htim2, &htim3);
 	TB6612_Init(&htim1);
@@ -164,12 +174,22 @@ int main(void)
 		if (current_tick - last_tick >= CONTROL_LOOP_PERIOD_MS) {
 			float dt = (current_tick - last_tick) / 1000.0f;
         last_tick = current_tick;
-			// cap nhat cam bien & bo dieu khien dong co 
-			SensorFusion_Update(dt);
+			
+			//1. Khai bao bien va doc khoang cach tu Encoder
+			float dist_l = 0.0f;
+			float dist_r = 0.0f;
+			Encoder_GetDistanceMM(&dist_l, &dist_r);
+			//2. Doc du lieu tu cam bien V53L0X va MPU6500
+			VL53L0X_Read_All(&vl_sensor_data);
+      MPU6500_Read_GyroZ(dt);
+			
+			// 3.cap nhat cam bien & bo dieu khien dong co 
+			SensorFusion_Update(&vl_sensor_data, &mpu_sensor_data, dist_l, dist_r, dt);
       Motion_Update(dt);
 			
-			// Chay may trang thai he thong
+			// 4.Chay may trang thai he thong
 			Process_FSM(dt);
+		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -608,7 +628,131 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+* @brief Kiem tra nut nhan chong doi theo co che Non - blocking
+*/
+uint8_t Is_Button_Pressed(void) {
+    if (HAL_GPIO_ReadPin(SWITCH_PIN_GPIO_Port, SWITCH_PIN_Pin) == GPIO_PIN_RESET) {
+        if (HAL_GetTick() - last_button_tick > DEBOUNCE_DELAY_MS) {
+            last_button_tick = HAL_GetTick();
+            return 1;
+        }
+    }
+    return 0;
+}
+void Process_FSM(float dt) {
+    static Action next_action = ACTION_STOP;
 
+    switch (current_sys_state) {
+        case SYS_STATE_IDLE:
+            if (Is_Button_Pressed()) {
+                LOG_SYS("Starting Exploration Run...\r\n");
+                Maze_Init(); // Reset ban do và vi tri robot ve (0,0)
+                next_action = ACTION_STOP;
+                current_sys_state = SYS_STATE_EXPLORE;
+            }
+            break;
+
+        case SYS_STATE_EXPLORE:
+            if (Motion_IsFinished()) {
+                // Buoc 1: Cap nhat toa do ao tuong ung voi buoc vua chay xong
+                Maze_UpdatePosition(next_action);
+
+                // Buoc 2: Kiem tra da den dich chua
+                if (Maze_IsGoalReached()) {
+                    LOG_SYS("Goal Reached! Saving Map to Flash...\r\n");
+                    Motion_Stop();
+                    Maze_SaveToFlash();
+                    HAL_GPIO_WritePin(LED_STAT_GPIO_Port, LED_STAT_Pin, GPIO_PIN_SET);
+                    current_sys_state = SYS_STATE_FINISHED;
+                    break;
+                }
+
+                // Bu?c 3: Ð?c tu?ng t?i t?a d? M?I và tính toán Floodfill
+                SensorFusion_Data *sf = SensorFusion_GetData();
+                Maze_UpdateWalls(sf);
+                Maze_ComputeFloodfill();
+
+                // Bu?c 4: L?y hành d?ng ti?p theo d?a trên b?ng Floodfill m?i
+                next_action = Maze_GetNextAction();
+
+                // Bu?c 5: Th?c thi chuy?n d?ng
+                switch (next_action) {
+                    case ACTION_FORWARD:
+                        Motion_MoveForward(180.0f);
+                        break;
+                    case ACTION_TURN_LEFT:
+                        Motion_Rotate(90.0f);
+                        break;
+                    case ACTION_TURN_RIGHT:
+                        Motion_Rotate(-90.0f);
+                        break;
+                    case ACTION_TURN_AROUND:
+                        Motion_Rotate(180.0f);
+                        break;
+                    default:
+                        Motion_Stop();
+                        current_sys_state = SYS_STATE_FINISHED;
+                        break;
+                }
+            }
+            break;
+
+        case SYS_STATE_FAST_RUN:
+            if (Motion_IsFinished()) {
+                // C?p nh?t v? trí t? hành d?ng v?a xong
+                Maze_UpdatePosition(next_action);
+
+                if (Maze_IsGoalReached()) {
+                    Motion_Stop();
+                    LOG_SYS("Fast Run Completed Successfully!\r\n");
+                    current_sys_state = SYS_STATE_FINISHED;
+                    break;
+                }
+
+                // Ch?y Fast Run ch? tính du?ng ng?n nh?t (không c?n quét tu?ng l?i)
+                next_action = Maze_GetNextAction();
+
+                switch (next_action) {
+                    case ACTION_FORWARD:
+                        Motion_MoveForward(180.0f);
+                        break;
+                    case ACTION_TURN_LEFT:
+                        Motion_Rotate(90.0f);
+                        break;
+                    case ACTION_TURN_RIGHT:
+                        Motion_Rotate(-90.0f);
+                        break;
+                    case ACTION_TURN_AROUND:
+                        Motion_Rotate(180.0f);
+                        break;
+                    default:
+                        Motion_Stop();
+                        current_sys_state = SYS_STATE_FINISHED;
+                        break;
+                }
+            }
+            break;
+
+        case SYS_STATE_FINISHED:
+            if (Is_Button_Pressed()) {
+                LOG_SYS("Loading Map from Flash & Starting Fast Run...\r\n");
+                // Reset vi tri xe ve (0,0) truoc, sau dó load ma tran tuong tu Flash
+                Maze_Init();
+                Maze_LoadFromFlash();
+                Maze_ComputeFloodfill(); // Tính du?ng t?i uu
+                
+                next_action = ACTION_STOP;
+                current_sys_state = SYS_STATE_FAST_RUN;
+            }
+            break;
+
+        case SYS_STATE_ERROR:
+        default:
+            Motion_Stop();
+            break;
+    }
+}
 /* USER CODE END 4 */
 
 /**
