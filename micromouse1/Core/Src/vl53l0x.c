@@ -1,5 +1,5 @@
 #include "vl53l0x.h"
-#include "conflig.h"
+#include "config.h"
 
 // Dia chi I2C 8-bit moi cho 4 cam bien (Write Address)
 #define ADDR_L   0x54

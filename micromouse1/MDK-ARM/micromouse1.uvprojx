@@ -775,9 +775,9 @@
           <GroupName>Platform</GroupName>
           <Files>
             <File>
-              <FileName>conflig.h</FileName>
+              <FileName>config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Core\Inc\conflig.h</FilePath>
+              <FilePath>..\Core\Inc\config.h</FilePath>
             </File>
             <File>
               <FileName>tb6612fng.h</FileName>
@@ -815,9 +815,9 @@
           <GroupName>Sensing</GroupName>
           <Files>
             <File>
-              <FileName>conflig.h</FileName>
+              <FileName>config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Core\Inc\conflig.h</FilePath>
+              <FilePath>..\Core\Inc\config.h</FilePath>
             </File>
             <File>
               <FileName>vl53l0x.h</FileName>
@@ -845,9 +845,9 @@
           <GroupName>Motion</GroupName>
           <Files>
             <File>
-              <FileName>conflig.h</FileName>
+              <FileName>config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Core\Inc\conflig.h</FilePath>
+              <FilePath>..\Core\Inc\config.h</FilePath>
             </File>
             <File>
               <FileName>sensor_fusion.h</FileName>

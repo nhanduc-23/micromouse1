@@ -1,5 +1,5 @@
 #include "encoder.h"
-#include "conflig.h"
+#include "config.h"
 
 static TIM_HandleTypeDef *tim_l;
 static TIM_HandleTypeDef *tim_r;

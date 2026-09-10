@@ -1,5 +1,5 @@
 #include "sensor_fusion.h"
-#include "conflig.h"
+#include "config.h"
 
 // Nguong khoang cach nhan dien co tuong (mm)
 #define WALL_DETECTION_THRESHOLD 130.0f 

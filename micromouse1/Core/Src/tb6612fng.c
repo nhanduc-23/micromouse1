@@ -1,5 +1,5 @@
 #include "tb6612fng.h"
-#include "conflig.h"
+#include "config.h"
 
 static TIM_HandleTypeDef *pwmtim;
 

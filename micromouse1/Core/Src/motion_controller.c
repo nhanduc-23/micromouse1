@@ -1,5 +1,5 @@
 #include "motion_controller.h"
-#include "conflig.h"
+#include "config.h"
 #include "tb6612fng.h"   
 #include "encoder.h"
 #include <math.h>
