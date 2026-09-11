@@ -11,7 +11,7 @@ typedef struct {
 } MPU6500_Data;
 
 // Khoi tao MPU6500 qua I2C2
-uint8_t MPU6500_Init(I2C_HandleTypeDef *hi2c);
+HAL_StatusTypeDef MPU6500_Init(I2C_HandleTypeDef *hi2c);
 
 // Hieu chinh offset cho Gyro-Z khi robot dung yen ban dau (lay 100 mau)
 void MPU6500_Calibrate(void);

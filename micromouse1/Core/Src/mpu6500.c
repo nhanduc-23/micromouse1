@@ -19,21 +19,21 @@ static uint8_t MPU6500_ReadRegs(uint8_t reg, uint8_t *data, uint16_t len) {
     return (HAL_I2C_Mem_Read(mpu_i2c, MPU6500_ADDR, reg, I2C_MEMADD_SIZE_8BIT, data, len, 100) == HAL_OK);
 }
 
-uint8_t MPU6500_Init(I2C_HandleTypeDef *hi2c) {
+HAL_StatusTypeDef MPU6500_Init(I2C_HandleTypeDef *hi2c) {
     mpu_i2c = hi2c;
 
     // 1. Thuc hien Reset chip va danh thuc (Power Management 1)
     if (!MPU6500_WriteReg(MPU6500_PWR_MGMT_1, 0x00)) return 0;
     HAL_Delay(50);
 
-    // 2. C?u hinh Gyro Full Scale Range ±2000 deg/s (Thanh ghi 0x1B = 0x18)
+    // 2. Cau hinh Gyro Full Scale Range ±2000 deg/s (Thanh ghi 0x1B = 0x18)
     if (!MPU6500_WriteReg(MPU6500_GYRO_CONFIG, 0x18)) return 0;
     HAL_Delay(10);
 
     // 3. Calibrate offset khi khoi tao
     MPU6500_Calibrate();
 
-    return 1;
+    return HAL_OK;
 }
 
 void MPU6500_Calibrate(void) {

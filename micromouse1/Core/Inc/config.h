@@ -70,7 +70,7 @@ static const Pin PWM_RIGHT       = { GPIOA, GPIO_PIN_9 }; // TIM1_CH2 - PA9
 // Nut nhan / Nut gat cau hinh
 static const Pin LED_BOARD       = { GPIOC, GPIO_PIN_13 }; // PC13[cite: 1]
 static const Pin BTN_MODE        = { GPIOA, GPIO_PIN_2 };  // PA2[cite: 1]
-static const Pin BT_RXD          = { GPIOA, GPIO_PIN_11 }; // PA11[cite: 1]
-static const Pin BT_TXD          = { GPIOA, GPIO_PIN_12 }; // PA12[cite: 1]
+static const Pin BT_TXD          = { GPIOA, GPIO_PIN_11 }; // PA11[cite: 1]
+static const Pin BT_RXD          = { GPIOA, GPIO_PIN_12 }; // PA12[cite: 1]
 
 #endif // CONFIG_H

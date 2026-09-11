@@ -23,4 +23,10 @@ void SensorFusion_Update(VL53L0X_Data *vl_data, MPU6500_Data *mpu_data, float di
 // Lay con tro du lieu hop nhat
 SensorFusion_Data* SensorFusion_GetData(void);
 
+// Ham dat lai bien luu vet ENcoder khi Reset Encoder
+void SensorFusion_ResetEncoders(void);
+
+// Dat lai goc hop nhat ve 0 khi bat dau luot chay moi
+void SensorFusion_ResetAngle(void);
+
 #endif /* SENSOR_FUSION_H */

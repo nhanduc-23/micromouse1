@@ -140,6 +140,7 @@ int main(void)
 	// kich hoat motor driver TB6612 (chuyen chan SSTBY tu RESET sang SET)
 	HAL_GPIO_WritePin(STBY_GPIO_Port, STBY_Pin, GPIO_PIN_SET);
   // 1. Khoi tao cac module phan cung
+	BT_Init_Rx(&huart6); // Khoi tao Bluetooth UART & bat ngat nhan du lieu
 	Encoder_Init(&htim2, &htim3);
 	TB6612_Init(&htim1);
 	LOG_SYS("--- MICROMOUSE STARTUP ---\r\n");
@@ -182,6 +183,12 @@ int main(void)
 			//2. Doc du lieu tu cam bien V53L0X va MPU6500
 			VL53L0X_Read_All(&vl_sensor_data);
       MPU6500_Read_GyroZ(dt);
+			
+			//Copy du lieu Gyro moi nhat tu driver vao mpu_sensor_data
+			MPU6500_Data *mpu_ptr = MPU6500_GetData();
+      if (mpu_ptr != NULL) {
+          mpu_sensor_data = *mpu_ptr;
+      }
 			
 			// 3.cap nhat cam bien & bo dieu khien dong co 
 			SensorFusion_Update(&vl_sensor_data, &mpu_sensor_data, dist_l, dist_r, dt);
@@ -602,8 +609,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : SWITCH_PIN_Pin */
   GPIO_InitStruct.Pin = SWITCH_PIN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(SWITCH_PIN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : XSHUT_L_Pin XSHUT_FL_Pin STBY_Pin */
@@ -629,15 +636,27 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 /**
-* @brief Kiem tra nut nhan chong doi theo co che Non - blocking
+* @brief Kiem tra nut nhan chong doi va bat canh xuong (One-shot / Press Event)
 */
 uint8_t Is_Button_Pressed(void) {
-    if (HAL_GPIO_ReadPin(SWITCH_PIN_GPIO_Port, SWITCH_PIN_Pin) == GPIO_PIN_RESET) {
+    static uint8_t btn_last_state = 1; // 1: Nha nut (GPIO_PIN_SET), 0: Nhan nut (GPIO_PIN_RESET)
+    uint8_t current_state = HAL_GPIO_ReadPin(SWITCH_PIN_GPIO_Port, SWITCH_PIN_Pin);
+		uint32_t now = HAL_GetTick();
+	
+    // Phat hien thoi diem bat dau nhan nut (chi kich hoat khi truoc do nut dang nha)
+    if (current_state == GPIO_PIN_RESET && btn_last_state == 1) {
         if (HAL_GetTick() - last_button_tick > DEBOUNCE_DELAY_MS) {
-            last_button_tick = HAL_GetTick();
-            return 1;
+            last_button_tick = now;
+            btn_last_state = 0; // Danh dau nat dang duoc giu
+            return 1;           // Chi tra ve 1 dung mot lan duy nhat cho moi lan nhan
         }
+    } 
+    // Khi nguoi dung nha nut ra hoan toan
+    else if (current_state == GPIO_PIN_SET && btn_last_state == 0) {
+        if (now - last_button_tick > DEBOUNCE_DELAY_MS) {
+				btn_last_state = 1;     // Ðat lai trang thai cho cho lan nhan tiep theo
     }
+	}
     return 0;
 }
 void Process_FSM(float dt) {
@@ -648,7 +667,8 @@ void Process_FSM(float dt) {
             if (Is_Button_Pressed()) {
                 LOG_SYS("Starting Exploration Run...\r\n");
                 Maze_Init(); // Reset ban do và vi tri robot ve (0,0)
-                next_action = ACTION_STOP;
+								SensorFusion_ResetAngle();
+								next_action = ACTION_STOP;
                 current_sys_state = SYS_STATE_EXPLORE;
             }
             break;
@@ -668,15 +688,15 @@ void Process_FSM(float dt) {
                     break;
                 }
 
-                // Bu?c 3: Ð?c tu?ng t?i t?a d? M?I và tính toán Floodfill
+                // Buoc 3: Ðoc tuong tai toa do MOI và tinh toan Floodfill
                 SensorFusion_Data *sf = SensorFusion_GetData();
                 Maze_UpdateWalls(sf);
                 Maze_ComputeFloodfill();
 
-                // Bu?c 4: L?y hành d?ng ti?p theo d?a trên b?ng Floodfill m?i
+                // Buoc 4: Lay hanh dong tiep theo dua trên bang Floodfill moi
                 next_action = Maze_GetNextAction();
 
-                // Bu?c 5: Th?c thi chuy?n d?ng
+                // Buoc 5: Thuc thi chuyen dong
                 switch (next_action) {
                     case ACTION_FORWARD:
                         Motion_MoveForward(180.0f);
@@ -700,7 +720,7 @@ void Process_FSM(float dt) {
 
         case SYS_STATE_FAST_RUN:
             if (Motion_IsFinished()) {
-                // C?p nh?t v? trí t? hành d?ng v?a xong
+                // Cap nhat vi tri tu hanh dong vua xong
                 Maze_UpdatePosition(next_action);
 
                 if (Maze_IsGoalReached()) {
@@ -710,7 +730,7 @@ void Process_FSM(float dt) {
                     break;
                 }
 
-                // Ch?y Fast Run ch? tính du?ng ng?n nh?t (không c?n quét tu?ng l?i)
+                // Chay Fast Run chi tinh duong ngan nhat (không can quét tuong lai)
                 next_action = Maze_GetNextAction();
 
                 switch (next_action) {
@@ -728,7 +748,7 @@ void Process_FSM(float dt) {
                         break;
                     default:
                         Motion_Stop();
-                        current_sys_state = SYS_STATE_FINISHED;
+                        current_sys_state = SYS_STATE_ERROR;
                         break;
                 }
             }
@@ -740,8 +760,8 @@ void Process_FSM(float dt) {
                 // Reset vi tri xe ve (0,0) truoc, sau dó load ma tran tuong tu Flash
                 Maze_Init();
                 Maze_LoadFromFlash();
-                Maze_ComputeFloodfill(); // Tính du?ng t?i uu
-                
+                Maze_ComputeFloodfill(); // Tinh duong toi uu
+                SensorFusion_ResetAngle(); // Reset goc moc ve 0 khi bat dau Fast Run
                 next_action = ACTION_STOP;
                 current_sys_state = SYS_STATE_FAST_RUN;
             }

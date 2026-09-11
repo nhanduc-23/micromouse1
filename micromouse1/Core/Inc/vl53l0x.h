@@ -13,7 +13,7 @@ typedef struct {
 } VL53L0X_Data;
 
 // Khoi tao va dinh dia chi I2C moi cho ca 4 cam bien
-uint8_t VL53L0X_Init_All(I2C_HandleTypeDef *hi2c);
+HAL_StatusTypeDef VL53L0X_Init_All(I2C_HandleTypeDef *hi2c);
 
 // Doc gia tri khoang cach hien tai tu ca 4 cam bien (don vi mm)
 void VL53L0X_Read_All(VL53L0X_Data *data);

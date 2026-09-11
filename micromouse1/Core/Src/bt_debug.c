@@ -25,7 +25,7 @@ void BT_Init_Rx(UART_HandleTypeDef *huart) {
 // Ghi de ham fputc de chuyen huong printf qua Bluetooth UART
 int fputc(int ch, FILE *f) {
     if (bt_huart != NULL) {
-        HAL_UART_Transmit(bt_huart, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
+        HAL_UART_Transmit(bt_huart, (uint8_t *)&ch, 1, 10);
     }
     return ch;
 }
@@ -41,8 +41,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
             rx_index = 0;
         } else if (rx_index < sizeof(rx_buffer) - 1) {
             rx_buffer[rx_index++] = rx_data;
-        }
-        
+        } else{
+					//Reset rx_index khi tran bo dem de san sang nhap lenh tiep theo
+        rx_index = 0;
+				}
         // Tiep tuc cho ngat nhan byte tiep theo
         HAL_UART_Receive_IT(bt_huart, &rx_data, 1);
     }

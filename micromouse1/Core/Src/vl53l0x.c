@@ -44,23 +44,27 @@ uint8_t VL53L0X_Init_All(I2C_HandleTypeDef *hi2c) {
     HAL_GPIO_WritePin(XSHUT_L.port, XSHUT_L.pin, GPIO_PIN_SET);
     HAL_Delay(5);
     VL53L0X_WriteReg(VL53L0X_DEFAULT_ADDR, 0x8A, ADDR_L >> 1);
-
+		  VL53L0X_WriteReg(ADDR_L, 0x00, 0x02);
+	
     // Cam bien Truoc-Trai (Front-Left - PA4)
     HAL_GPIO_WritePin(XSHUT_FL.port, XSHUT_FL.pin, GPIO_PIN_SET);
     HAL_Delay(5);
     VL53L0X_WriteReg(VL53L0X_DEFAULT_ADDR, 0x8A, ADDR_FL >> 1);
+		VL53L0X_WriteReg(ADDR_FL, 0x00, 0x02);
 
     // Cam bien Truoc-Phai (Front-Right - PB0)
     HAL_GPIO_WritePin(XSHUT_FR.port, XSHUT_FR.pin, GPIO_PIN_SET);
     HAL_Delay(5);
     VL53L0X_WriteReg(VL53L0X_DEFAULT_ADDR, 0x8A, ADDR_FR >> 1);
+		VL53L0X_WriteReg(ADDR_FR, 0x00, 0x02);
 
     // Cam bien Phai (Right - PB1)
     HAL_GPIO_WritePin(XSHUT_R.port, XSHUT_R.pin, GPIO_PIN_SET);
     HAL_Delay(5);
     VL53L0X_WriteReg(VL53L0X_DEFAULT_ADDR, 0x8A, ADDR_R >> 1);
-
-    return 1;
+		VL53L0X_WriteReg(ADDR_R, 0x00, 0x02);
+		
+    return HAL_OK;
 }
 
 void VL53L0X_Read_All(VL53L0X_Data *data) {

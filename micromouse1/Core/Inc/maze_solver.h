@@ -4,6 +4,7 @@
 #include "main.h"
 #include "sensor_fusion.h"
 #include "flash.h"
+#include "bt_debug.h"
 #include <stdbool.h>
 
 #define MAZE_SIZE 16
