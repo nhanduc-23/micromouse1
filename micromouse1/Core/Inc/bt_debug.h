@@ -10,7 +10,7 @@ extern float kp_speed;
 extern float ki_speed;
 extern float kd_speed;
 
-// Khoi tao Bluetooth Debug truyê`n va nhan du lieu (USART6)
+// Khoi tao Bluetooth Debug truyen va nhan du lieu (USART6)
 void BT_Init(UART_HandleTypeDef *huart);
 void BT_Init_Rx(UART_HandleTypeDef *huart);
 
