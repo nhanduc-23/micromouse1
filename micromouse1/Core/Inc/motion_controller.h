@@ -32,4 +32,9 @@ void Motion_Stop(void);
 // Kiem tra Robot da hoan thanh hanh dong hay chua
 bool Motion_IsFinished(void);
 
+//ham cap nhat thong so PID qua Bluetooth
+// Cap nhat cho PID Wall PID
+void Motion_UpdatePIDWall(float kp, float ki, float kd);
+void Motion_UpdatePIDGyro(float kp, float ki, float kd);
+
 #endif /* MOTION_CONTROLLER_H */

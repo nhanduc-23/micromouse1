@@ -33,12 +33,23 @@ void SensorFusion_ResetEncoders(void) {
     prev_dist_r = 0.0f;
 }
 void SensorFusion_Update(VL53L0X_Data *vl_data, MPU6500_Data *mpu_data, float dist_l_mm, float dist_r_mm, float dt) {
-    // 1. Nhan dien co mat cua tuong (Wall Detection)
+    // 1. Nhan dien tuong ben
     sf_data.wall_left  = (vl_data->l < WALL_DETECTION_THRESHOLD);
     sf_data.wall_right = (vl_data->r < WALL_DETECTION_THRESHOLD);
 
-    uint16_t front_dist = (vl_data->fl + vl_data->fr) / 2;
-    sf_data.wall_front = (front_dist < WALL_DETECTION_THRESHOLD);
+    // Sua loi nhan dien tuong truoc
+    bool fl_valid = (vl_data->fl < 2000);
+    bool fr_valid = (vl_data->fr < 2000);
+
+    if (fl_valid && fr_valid) {
+        sf_data.wall_front = (((float)vl_data->fl + (float)vl_data->fr) / 2.0f) < WALL_DETECTION_THRESHOLD;
+    } else if (fl_valid) {
+        sf_data.wall_front = ((float)vl_data->fl < WALL_DETECTION_THRESHOLD);
+    } else if (fr_valid) {
+        sf_data.wall_front = ((float)vl_data->fr < WALL_DETECTION_THRESHOLD);
+    } else {
+        sf_data.wall_front = false;
+    }
 
     // 2. Tinh toan sai so lech tam (Wall Error) cho PID bam tuong
     if (sf_data.wall_left && sf_data.wall_right) {

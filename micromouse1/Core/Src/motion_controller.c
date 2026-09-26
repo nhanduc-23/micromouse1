@@ -7,6 +7,9 @@
 
 #define MIN_ROTATE_PWM      120.0f //Nguong PWM toi thieu de vuot ma sat tinh dong co N20
 #define ROTATE_TIMEOUT_MS   1500 //Thoi gian cho toi da cho 1 lan xoay foc (1.5 giay)
+#define ROTATE_TIMEOUT_MS   1500
+#define SETTLING_TIME_MS    80 	//Thoi gian on dinh co hoc sau khi xoay
+
 
 static PID_Controller pid_wall;
 static PID_Controller pid_gyro;
@@ -17,7 +20,9 @@ static float target_distance = 0.0f;
 static float target_angle = 0.0f;
 static bool is_finished = true;
 static uint32_t rotate_start_tick = 0; // Bien ghi nhan thoi diem bat dau xoay
-
+//Chong rung lac
+static uint32_t settle_start_tick = 0;
+static bool is_settling = false;
 void Motion_Init(void) {
     // Kp, Ki, Kd, OutMin, OutMax cho PID bam tuong
     PID_Init(&pid_wall, 2.0f, 0.0f, 0.5f, -300.0f, 300.0f);
@@ -28,6 +33,19 @@ void Motion_Init(void) {
     Motion_Stop();
 }
 
+//Cap nhat thong so PID bam tuong
+void Motion_UpdatePIDWall(float kp, float ki, float kd) {
+    pid_wall.kp = kp;
+    pid_wall.ki = ki;
+    pid_wall.kd = kd;
+}
+
+//Cap nhat thong so PID Gyro goc xoay
+void Motion_UpdatePIDGyro(float kp, float ki, float kd) {
+    pid_gyro.kp = kp;
+    pid_gyro.ki = ki;
+    pid_gyro.kd = kd;
+}
 void Motion_MoveForward(float distance_mm) {
     target_distance = distance_mm;
     
@@ -36,13 +54,16 @@ void Motion_MoveForward(float distance_mm) {
     
 		PID_Reset(&pid_wall);
 		PID_Reset(&pid_gyro);
-		
+		PID_Reset(&pid_wall);
+    PID_Reset(&pid_gyro);
+	
 	 // Khoa goc huong hien tai lam moc giu thang khi di qua o khong co tuong
     SensorFusion_Data *sf = SensorFusion_GetData();
     target_angle = sf->fused_angle; 
 
     current_state = MOTION_STATE_FORWARD;
     is_finished = false;
+		is_settling = false;
 }
 
 void Motion_Rotate(float angle_deg) {
@@ -55,6 +76,7 @@ void Motion_Rotate(float angle_deg) {
     PID_Reset(&pid_gyro);
     current_state = MOTION_STATE_ROTATE;
     is_finished = false;
+		is_settling = false;
 	  rotate_start_tick = HAL_GetTick(); // Ghi nhan tick thoi gian bat dau
 }
 
@@ -62,6 +84,7 @@ void Motion_Stop(void) {
     TB6612_SetSpeed(0, 0);
     current_state = MOTION_STATE_IDLE;
     is_finished = true;
+		is_settling = false;
 }
 
 bool Motion_IsFinished(void) {
@@ -99,6 +122,8 @@ void Motion_Update(float dt) {
         int base_speed = 400;
         if (remaining_dist < 40.0f) {
             base_speed = 150 + (int)(250.0f * (remaining_dist / 40.0f));
+        } else if(remaining_dist < 40.0f) {
+            base_speed = 150 + (int)(250.0f * (remaining_dist / 40.0f));
         }
 
         int speed_left = base_speed + (int)correction;
@@ -111,8 +136,17 @@ void Motion_Update(float dt) {
 
         // 1. Dung khi sai so goc nho hon 1.0 do
         if (fabsf(angle_error) < 1.0f) {
-            Motion_Stop();
+					TB6612_SetSpeed(0, 0);
+            if (!is_settling) {
+                is_settling = true;
+                settle_start_tick = HAL_GetTick();
+            } else if (HAL_GetTick() - settle_start_tick >= SETTLING_TIME_MS) {
+                Motion_Stop();
+                return;
+            }
             return;
+        } else {
+            is_settling = false;
         }
 				
 				// 2. Dieu kien Timeout an toan : Thoat ket neu qua 1.5 s chua xoay xong

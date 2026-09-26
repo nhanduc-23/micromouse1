@@ -133,7 +133,7 @@ Action Maze_GetNextAction(void) {
     // Neu da toi dich (khoang cach = 0) thi dung lai
     if (current_dist == 0) return ACTION_STOP;
 
-    uint8_t min_dist = 255;
+    uint8_t min_dist = current_dist;
     Direction best_dir = robot.dir;
     bool found_move = false;
 

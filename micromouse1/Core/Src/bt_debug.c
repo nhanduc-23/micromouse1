@@ -1,4 +1,5 @@
 #include "bt_debug.h"
+#include "motion_controller.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -7,10 +8,15 @@ static uint8_t rx_data = 0;
 static char rx_buffer[64];
 static uint8_t rx_index = 0;
 
-// Gia tri khoi tao PID mac dinh
-float kp_speed = 1.2f;
-float ki_speed = 0.01f;
-float kd_speed = 0.05f;
+//Gia tri ban dau c?a Wall PID
+float kp_wall = 2.0f;
+float ki_wall = 0.0f;
+float kd_wall = 0.5f;
+
+// Gia tri ban dau cua Gyro PID
+float kp_gyro = 4.0f;
+float ki_gyro = 0.05f;
+float kd_gyro = 0.8f;
 
 void BT_Init(UART_HandleTypeDef *huart) {
     bt_huart = huart;
@@ -50,15 +56,34 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     }
 }
 
-// Bóc tách va xu ly lenh gui ve tu Web Console (Vi du: "PID 1.5 0.01 0.2")
 void BT_ParseCommand(char *cmd) {
     float p, i, d;
-    if (sscanf(cmd, "PID %f %f %f", &p, &i, &d) == 3) {
-        kp_speed = p;
-        ki_speed = i;
-        kd_speed = d;
-        LOG_SYS("Cap nhat PID thanh cong: P=%.2f, I=%.2f, D=%.2f", kp_speed, ki_speed, kd_speed);
-    } else {
-        LOG_WRN("Lenh khong hop le: %s", cmd);
+
+	// 1. Lenh cap nhat PID bam tuong: PID_WALL
+    if (sscanf(cmd, "PID_WALL %f %f %f", &p, &i, &d) == 3) {
+        kp_wall = p;
+        ki_wall = i;
+        kd_wall = d;
+        Motion_UpdatePIDWall(p, i, d);
+        LOG_SYS("Cap nhat PID Wall thanh cong: P=%.2f, I=%.2f, D=%.2f\r\n", p, i, d);
+    }
+    // 2. Lenh cap nhat PID Gyro: "PID_GYRO 4.5 0.05 1.0"
+    else if (sscanf(cmd, "PID_GYRO %f %f %f", &p, &i, &d) == 3) {
+        kp_gyro = p;
+        ki_gyro = i;
+        kd_gyro = d;
+        Motion_UpdatePIDGyro(p, i, d);
+        LOG_SYS("Cap nhat PID Gyro thanh cong: P=%.2f, I=%.2f, D=%.2f\r\n", p, i, d);
+    }
+    // 3. Lenh mac dinh cho Gyro PID (tuong thích ngu?c): "PID 4.0 0.05 0.8"
+    else if (sscanf(cmd, "PID %f %f %f", &p, &i, &d) == 3) {
+        kp_gyro = p;
+        ki_gyro = i;
+        kd_gyro = d;
+        Motion_UpdatePIDGyro(p, i, d);
+        LOG_SYS("Cap nhat PID Gyro (Default) thanh cong: P=%.2f, I=%.2f, D=%.2f\r\n", p, i, d);
+    } 
+    else {
+        LOG_WRN("Lenh khong hop le: %s\r\n", cmd);
     }
 }

@@ -22,14 +22,17 @@ static uint16_t VL53L0X_ReadRange(uint8_t addr) {
     uint8_t reg = 0x14;
     uint8_t data[2] = {0};
     
-    HAL_I2C_Master_Transmit(sensor_i2c, addr, &reg, 1, 10);
-    if (HAL_I2C_Master_Receive(sensor_i2c, addr, data, 2, 10) == HAL_OK) {
-        return (uint16_t)((data[0] << 8) | data[1]);
+    if(HAL_I2C_Master_Transmit(sensor_i2c, addr, &reg, 1, 10) == HAL_OK){
+			if (HAL_I2C_Master_Receive(sensor_i2c, addr, data, 2, 10) == HAL_OK) {
+        uint16_t range = (uint16_t)((data[0] << 8) | data[1]);
+            if (range == 0 || range > 2000) return 8190;
+            return range;
+        }
     }
     return 8190; // Tra ve gia tri max khi loi hoac vuot tam do
 }
 
-uint8_t VL53L0X_Init_All(I2C_HandleTypeDef *hi2c) {
+HAL_StatusTypeDef VL53L0X_Init_All(I2C_HandleTypeDef *hi2c) {
     sensor_i2c = hi2c;
 
     // 1. Dua tat ca chan XSHUT ve LOW de Reset toan bo cam bien

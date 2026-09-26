@@ -1,4 +1,5 @@
 #include "mpu6500.h"
+#include "config.h"
 
 #define MPU6500_ADDR        (0x68 << 1) // Dia chi I2C 8-bit (AD0 = LOW)
 #define MPU6500_PWR_MGMT_1  0x6B
@@ -46,8 +47,16 @@ void MPU6500_Calibrate(void) {
             int16_t raw = (int16_t)((buf[0] << 8) | buf[1]);
             sum += raw;
         }
+				//nhay LED canh bao dang Calibrate Gyro
+				if (i % 20 == 0) {
+            HAL_GPIO_TogglePin(LED_BOARD.port, LED_BOARD.pin);
+        }
         HAL_Delay(2);
     }
+		
+		//Tat LED sau khi calibrate xong
+		HAL_GPIO_WritePin(LED_BOARD.port, LED_BOARD.pin, GPIO_PIN_SET);
+		
 
     // Tinh trung binh trôi Gyro-Z (dinh dang deg/s)
     mpu_data.gz_offset = ((float)sum / samples) / GYRO_SCALE_FACTOR;
