@@ -2595,24 +2595,24 @@ Image Symbol Table
     [Anonymous Symbol]                       0x08005400   Section        0  system_stm32f4xx.o(.text.SystemInit)
     [Anonymous Symbol]                       0x08005414   Section        0  tb6612fng.o(.text.TB6612_Init)
     [Anonymous Symbol]                       0x08005484   Section        0  tb6612fng.o(.text.TB6612_SetSpeed)
-    [Anonymous Symbol]                       0x0800552c   Section        0  stm32f4xx_hal_tim.o(.text.TIM_Base_SetConfig)
-    UART_SetConfig                           0x0800562d   Thumb Code   230  stm32f4xx_hal_uart.o(.text.UART_SetConfig)
-    [Anonymous Symbol]                       0x0800562c   Section        0  stm32f4xx_hal_uart.o(.text.UART_SetConfig)
-    [Anonymous Symbol]                       0x08005714   Section        0  stm32f4xx_it.o(.text.UsageFault_Handler)
-    [Anonymous Symbol]                       0x08005718   Section        0  vl53l0x.o(.text.VL53L0X_Init_All)
-    [Anonymous Symbol]                       0x08005860   Section        0  vl53l0x.o(.text.VL53L0X_Read_All)
-    [Anonymous Symbol]                       0x080059e4   Section        0  bt_debug.o(.text.fputc)
-    [Anonymous Symbol]                       0x08005a08   Section        0  main.o(.text.main)
-    i.__scatterload_copy                     0x08005f50   Section       14  handlers.o(i.__scatterload_copy)
-    i.__scatterload_null                     0x08005f5e   Section        2  handlers.o(i.__scatterload_null)
-    i.__scatterload_zeroinit                 0x08005f60   Section       14  handlers.o(i.__scatterload_zeroinit)
-    i._is_digit                              0x08005f6e   Section        0  scanf_fp.o(i._is_digit)
-    i.puts                                   0x08005f7c   Section        0  puts.o(i.puts)
-    .Lstr.11                                 0x08005fb8   Data          36  main.o(.rodata.str1.1)
-    [Anonymous Symbol]                       0x08005fb8   Section        0  main.o(.rodata.str1.1)
-    .Lstr                                    0x08005fdc   Data          34  main.o(.rodata.str1.1)
-    .Lstr.17                                 0x08005ffe   Data          44  main.o(.rodata.str1.1)
-    .Lstr.10                                 0x0800602a   Data          33  main.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x08005564   Section        0  stm32f4xx_hal_tim.o(.text.TIM_Base_SetConfig)
+    UART_SetConfig                           0x08005665   Thumb Code   230  stm32f4xx_hal_uart.o(.text.UART_SetConfig)
+    [Anonymous Symbol]                       0x08005664   Section        0  stm32f4xx_hal_uart.o(.text.UART_SetConfig)
+    [Anonymous Symbol]                       0x0800574c   Section        0  stm32f4xx_it.o(.text.UsageFault_Handler)
+    [Anonymous Symbol]                       0x08005750   Section        0  vl53l0x.o(.text.VL53L0X_Init_All)
+    [Anonymous Symbol]                       0x08005898   Section        0  vl53l0x.o(.text.VL53L0X_Read_All)
+    [Anonymous Symbol]                       0x08005a1c   Section        0  bt_debug.o(.text.fputc)
+    [Anonymous Symbol]                       0x08005a40   Section        0  main.o(.text.main)
+    i.__scatterload_copy                     0x08005f88   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x08005f96   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x08005f98   Section       14  handlers.o(i.__scatterload_zeroinit)
+    i._is_digit                              0x08005fa6   Section        0  scanf_fp.o(i._is_digit)
+    i.puts                                   0x08005fb4   Section        0  puts.o(i.puts)
+    .Lstr.11                                 0x08005ff0   Data          36  main.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x08005ff0   Section        0  main.o(.rodata.str1.1)
+    .Lstr                                    0x08006014   Data          34  main.o(.rodata.str1.1)
+    .Lstr.17                                 0x08006036   Data          44  main.o(.rodata.str1.1)
+    .Lstr.10                                 0x08006062   Data          33  main.o(.rodata.str1.1)
     .data                                    0x20000000   Section        4  stdout.o(.data)
     .L_MergedGlobals                         0x20000004   Data           8  stm32f4xx_hal.o(.data..L_MergedGlobals)
     [Anonymous Symbol]                       0x20000004   Section        0  stm32f4xx_hal.o(.data..L_MergedGlobals)
@@ -2920,22 +2920,22 @@ Image Symbol Table
     SystemClock_Config                       0x08005359   Thumb Code   168  main.o(.text.SystemClock_Config)
     SystemInit                               0x08005401   Thumb Code    18  system_stm32f4xx.o(.text.SystemInit)
     TB6612_Init                              0x08005415   Thumb Code   110  tb6612fng.o(.text.TB6612_Init)
-    TB6612_SetSpeed                          0x08005485   Thumb Code   166  tb6612fng.o(.text.TB6612_SetSpeed)
-    TIM_Base_SetConfig                       0x0800552d   Thumb Code   254  stm32f4xx_hal_tim.o(.text.TIM_Base_SetConfig)
-    UsageFault_Handler                       0x08005715   Thumb Code     2  stm32f4xx_it.o(.text.UsageFault_Handler)
-    VL53L0X_Init_All                         0x08005719   Thumb Code   326  vl53l0x.o(.text.VL53L0X_Init_All)
-    VL53L0X_Read_All                         0x08005861   Thumb Code   386  vl53l0x.o(.text.VL53L0X_Read_All)
-    fputc                                    0x080059e5   Thumb Code    36  bt_debug.o(.text.fputc)
-    main                                     0x08005a09   Thumb Code  1220  main.o(.text.main)
-    __scatterload_copy                       0x08005f51   Thumb Code    14  handlers.o(i.__scatterload_copy)
-    __scatterload_null                       0x08005f5f   Thumb Code     2  handlers.o(i.__scatterload_null)
-    __scatterload_zeroinit                   0x08005f61   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    _is_digit                                0x08005f6f   Thumb Code    14  scanf_fp.o(i._is_digit)
-    puts                                     0x08005f7d   Thumb Code    30  puts.o(i.puts)
-    AHBPrescTable                            0x08005fa0   Data          16  system_stm32f4xx.o(.rodata.AHBPrescTable)
-    APBPrescTable                            0x08005fb0   Data           8  system_stm32f4xx.o(.rodata.APBPrescTable)
-    Region$$Table$$Base                      0x0800604c   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x0800606c   Number         0  anon$$obj.o(Region$$Table)
+    TB6612_SetSpeed                          0x08005485   Thumb Code   224  tb6612fng.o(.text.TB6612_SetSpeed)
+    TIM_Base_SetConfig                       0x08005565   Thumb Code   254  stm32f4xx_hal_tim.o(.text.TIM_Base_SetConfig)
+    UsageFault_Handler                       0x0800574d   Thumb Code     2  stm32f4xx_it.o(.text.UsageFault_Handler)
+    VL53L0X_Init_All                         0x08005751   Thumb Code   326  vl53l0x.o(.text.VL53L0X_Init_All)
+    VL53L0X_Read_All                         0x08005899   Thumb Code   386  vl53l0x.o(.text.VL53L0X_Read_All)
+    fputc                                    0x08005a1d   Thumb Code    36  bt_debug.o(.text.fputc)
+    main                                     0x08005a41   Thumb Code  1220  main.o(.text.main)
+    __scatterload_copy                       0x08005f89   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x08005f97   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x08005f99   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    _is_digit                                0x08005fa7   Thumb Code    14  scanf_fp.o(i._is_digit)
+    puts                                     0x08005fb5   Thumb Code    30  puts.o(i.puts)
+    AHBPrescTable                            0x08005fd8   Data          16  system_stm32f4xx.o(.rodata.AHBPrescTable)
+    APBPrescTable                            0x08005fe8   Data           8  system_stm32f4xx.o(.rodata.APBPrescTable)
+    Region$$Table$$Base                      0x08006084   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x080060a4   Number         0  anon$$obj.o(Region$$Table)
     __stdout                                 0x20000000   Data           4  stdout.o(.data)
     uwTickFreq                               0x20000004   Data           1  stm32f4xx_hal.o(.data..L_MergedGlobals)
     uwTickPrio                               0x20000008   Data           4  stm32f4xx_hal.o(.data..L_MergedGlobals)
@@ -2959,9 +2959,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000199
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00006080, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000060b8, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x0000606c, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000060a4, Max: 0x00080000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -3135,46 +3135,45 @@ Memory Map of the image
     0x08005412   0x08005412   0x00000002   PAD
     0x08005414   0x08005414   0x0000006e   Code   RO         1110    .text.TB6612_Init   tb6612fng.o
     0x08005482   0x08005482   0x00000002   PAD
-    0x08005484   0x08005484   0x000000a6   Code   RO         1114    .text.TB6612_SetSpeed  tb6612fng.o
-    0x0800552a   0x0800552a   0x00000002   PAD
-    0x0800552c   0x0800552c   0x000000fe   Code   RO          658    .text.TIM_Base_SetConfig  stm32f4xx_hal_tim.o
-    0x0800562a   0x0800562a   0x00000002   PAD
-    0x0800562c   0x0800562c   0x000000e6   Code   RO          977    .text.UART_SetConfig  stm32f4xx_hal_uart.o
-    0x08005712   0x08005712   0x00000002   PAD
-    0x08005714   0x08005714   0x00000002   Code   RO           46    .text.UsageFault_Handler  stm32f4xx_it.o
-    0x08005716   0x08005716   0x00000002   PAD
-    0x08005718   0x08005718   0x00000146   Code   RO         1164    .text.VL53L0X_Init_All  vl53l0x.o
-    0x0800585e   0x0800585e   0x00000002   PAD
-    0x08005860   0x08005860   0x00000182   Code   RO         1166    .text.VL53L0X_Read_All  vl53l0x.o
-    0x080059e2   0x080059e2   0x00000002   PAD
-    0x080059e4   0x080059e4   0x00000024   Code   RO         1146    .text.fputc         bt_debug.o
-    0x08005a08   0x08005a08   0x00000548   Code   RO           11    .text.main          main.o
-    0x08005f50   0x08005f50   0x0000000e   Code   RO         1645    i.__scatterload_copy  mc_w.l(handlers.o)
-    0x08005f5e   0x08005f5e   0x00000002   Code   RO         1646    i.__scatterload_null  mc_w.l(handlers.o)
-    0x08005f60   0x08005f60   0x0000000e   Code   RO         1647    i.__scatterload_zeroinit  mc_w.l(handlers.o)
-    0x08005f6e   0x08005f6e   0x0000000e   Code   RO         1575    i._is_digit         mc_w.l(scanf_fp.o)
-    0x08005f7c   0x08005f7c   0x00000024   Code   RO         1298    i.puts              mc_w.l(puts.o)
-    0x08005fa0   0x08005fa0   0x00000010   Data   RO         1100    .rodata.AHBPrescTable  system_stm32f4xx.o
-    0x08005fb0   0x08005fb0   0x00000008   Data   RO         1101    .rodata.APBPrescTable  system_stm32f4xx.o
-    0x08005fb8   0x08005fb8   0x00000093   Data   RO           27    .rodata.str1.1      main.o
-    0x0800604b   0x0800604b   0x00000001   PAD
-    0x0800604c   0x0800604c   0x00000020   Data   RO         1644    Region$$Table       anon$$obj.o
+    0x08005484   0x08005484   0x000000e0   Code   RO         1114    .text.TB6612_SetSpeed  tb6612fng.o
+    0x08005564   0x08005564   0x000000fe   Code   RO          658    .text.TIM_Base_SetConfig  stm32f4xx_hal_tim.o
+    0x08005662   0x08005662   0x00000002   PAD
+    0x08005664   0x08005664   0x000000e6   Code   RO          977    .text.UART_SetConfig  stm32f4xx_hal_uart.o
+    0x0800574a   0x0800574a   0x00000002   PAD
+    0x0800574c   0x0800574c   0x00000002   Code   RO           46    .text.UsageFault_Handler  stm32f4xx_it.o
+    0x0800574e   0x0800574e   0x00000002   PAD
+    0x08005750   0x08005750   0x00000146   Code   RO         1164    .text.VL53L0X_Init_All  vl53l0x.o
+    0x08005896   0x08005896   0x00000002   PAD
+    0x08005898   0x08005898   0x00000182   Code   RO         1166    .text.VL53L0X_Read_All  vl53l0x.o
+    0x08005a1a   0x08005a1a   0x00000002   PAD
+    0x08005a1c   0x08005a1c   0x00000024   Code   RO         1146    .text.fputc         bt_debug.o
+    0x08005a40   0x08005a40   0x00000548   Code   RO           11    .text.main          main.o
+    0x08005f88   0x08005f88   0x0000000e   Code   RO         1645    i.__scatterload_copy  mc_w.l(handlers.o)
+    0x08005f96   0x08005f96   0x00000002   Code   RO         1646    i.__scatterload_null  mc_w.l(handlers.o)
+    0x08005f98   0x08005f98   0x0000000e   Code   RO         1647    i.__scatterload_zeroinit  mc_w.l(handlers.o)
+    0x08005fa6   0x08005fa6   0x0000000e   Code   RO         1575    i._is_digit         mc_w.l(scanf_fp.o)
+    0x08005fb4   0x08005fb4   0x00000024   Code   RO         1298    i.puts              mc_w.l(puts.o)
+    0x08005fd8   0x08005fd8   0x00000010   Data   RO         1100    .rodata.AHBPrescTable  system_stm32f4xx.o
+    0x08005fe8   0x08005fe8   0x00000008   Data   RO         1101    .rodata.APBPrescTable  system_stm32f4xx.o
+    0x08005ff0   0x08005ff0   0x00000093   Data   RO           27    .rodata.str1.1      main.o
+    0x08006083   0x08006083   0x00000001   PAD
+    0x08006084   0x08006084   0x00000020   Data   RO         1644    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08006070, Size: 0x00000b50, Max: 0x00020000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080060a8, Size: 0x00000b50, Max: 0x00020000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08006070   0x00000004   Data   RW         1593    .data               mc_w.l(stdout.o)
-    0x20000004   0x08006074   0x00000008   Data   RW          619    .data..L_MergedGlobals  stm32f4xx_hal.o
-    0x2000000c   0x0800607c   0x00000004   Data   RW         1099    .data.SystemCoreClock  system_stm32f4xx.o
+    0x20000000   0x080060a8   0x00000004   Data   RW         1593    .data               mc_w.l(stdout.o)
+    0x20000004   0x080060ac   0x00000008   Data   RW          619    .data..L_MergedGlobals  stm32f4xx_hal.o
+    0x2000000c   0x080060b4   0x00000004   Data   RW         1099    .data.SystemCoreClock  system_stm32f4xx.o
     0x20000010        -       0x0000006c   Zero   RW           29    .bss..L_MergedGlobals  main.o
     0x2000007c        -       0x00000014   Zero   RW         1133    .bss..L_MergedGlobals  encoder.o
     0x20000090        -       0x00000014   Zero   RW         1187    .bss..L_MergedGlobals  mpu6500.o
     0x200000a4        -       0x00000014   Zero   RW         1206    .bss..L_MergedGlobals  sensor_fusion.o
     0x200000b8        -       0x00000054   Zero   RW         1231    .bss..L_MergedGlobals  motion_controller.o
     0x2000010c        -       0x00000003   Zero   RW         1287    .bss..L_MergedGlobals  maze_solver.o
-    0x2000010f   0x08006080   0x00000001   PAD
+    0x2000010f   0x080060b8   0x00000001   PAD
     0x20000110        -       0x00000048   Zero   RW         1155    .bss..L_MergedGlobals.7  bt_debug.o
     0x20000158        -       0x00000100   Zero   RW         1285    .bss.dist_map       maze_solver.o
     0x20000258        -       0x00000054   Zero   RW           24    .bss.hi2c1          main.o
@@ -3189,7 +3188,7 @@ Memory Map of the image
     0x20000544        -       0x00000200   Zero   RW         1286    .bss.queue          maze_solver.o
     0x20000744        -       0x00000004   Zero   RW         1168    .bss.sensor_i2c     vl53l0x.o
     0x20000748        -       0x00000004   Zero   RW          618    .bss.uwTick         stm32f4xx_hal.o
-    0x2000074c   0x08006080   0x00000004   PAD
+    0x2000074c   0x080060b8   0x00000004   PAD
     0x20000750        -       0x00000400   Zero   RW            1    STACK               startup_stm32f411xe.o
 
 
@@ -3223,13 +3222,13 @@ Image component sizes
        812          0          0          0          0      32655   stm32f4xx_hal_uart.o
         20          0          0          0          0       1138   stm32f4xx_it.o
         18          0         24          4          0       2757   system_stm32f4xx.o
-       276          0          0          0          4       5009   tb6612fng.o
+       334          0          0          0          4       5164   tb6612fng.o
        712          0          0          0          4       6725   vl53l0x.o
 
     ----------------------------------------------------------------------
-     22000        654        612         12       2880     287730   Object Totals
+     22056        654        612         12       2880     287885   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-       102          0          1          0          5          0   (incl. Padding)
+       100          0          1          0          5          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -3282,15 +3281,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     24072        690        612         16       2880     288270   Grand Totals
-     24072        690        612         16       2880     288270   ELF Image Totals
-     24072        690        612         16          0          0   ROM Totals
+     24128        690        612         16       2880     288425   Grand Totals
+     24128        690        612         16       2880     288425   ELF Image Totals
+     24128        690        612         16          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                24684 (  24.11kB)
+    Total RO  Size (Code + RO Data)                24740 (  24.16kB)
     Total RW  Size (RW Data + ZI Data)              2896 (   2.83kB)
-    Total ROM Size (Code + RO Data + RW Data)      24700 (  24.12kB)
+    Total ROM Size (Code + RO Data + RW Data)      24756 (  24.18kB)
 
 ==============================================================================
 
